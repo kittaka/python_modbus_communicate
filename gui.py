@@ -18,19 +18,29 @@ sendlist=[0]*65535
 #  セクション1 - オプションの設定と標準レイアウト
 sg.theme('Dark Blue 3')
 
-layout = [
-    [sg.Text("通信設定を記載　すべて10進数で入力")],
-    [sg.Text("サーバーIP", size=(15, 1)), sg.InputText("127.0.0.1")],
-    [sg.Text("サーバーポート", size=(15, 1)), sg.InputText("502")],
-    [sg.Text("ファンクション", size=(15, 1)), sg.InputText("3")],
-    [sg.Text("開始レジスタ", size=(15, 1)), sg.InputText("")],
-    [sg.Text("レジスタ数", size=(15, 1)), sg.InputText("")],
-    [sg.Submit(button_text="クエリ実行",key="p1")],
-    [sg.Text("サーバー所持値", size=(15, 1)), sg.InputText("0")],
+layout_tab1 = [
+    [sg.Text("")],
+    [sg.Text("ファンクション", size=(15, 1)), sg.InputText("3", key="-function-")],
+    [sg.Text("開始レジスタ", size=(15, 1)), sg.InputText("", key="start_register")],
+    [sg.Text("レジスタ数", size=(15, 1)), sg.InputText("", key="amount_of_register")],
+    [sg.Submit(button_text="クエリ実行",key="p1")]
+]
+
+layout_tab2 = [
+    [sg.Text("")],
+    [sg.Text("サーバー所持値", size=(15, 1)), sg.InputText("0",key="-server_value-")],
     [sg.Submit(button_text="サーバー起動",key="p2"),sg.Submit(button_text="サーバー停止",key="p3"),sg.Submit(button_text="サーバーの所持値変更",key="p4")],
+]
+
+layout = [
+    [sg.Text("設定入力　※すべて10進数で入力")],
+    [sg.Text("サーバーIP", size=(15, 1)), sg.InputText("127.0.0.1",key="-server_IP-")],
+    [sg.Text("サーバーポート", size=(15, 1)), sg.InputText("502",key="-server_port-")],
+    [sg.TabGroup([[sg.Tab('クライアント操作', layout_tab1), sg.Tab('サーバー操作', layout_tab2)]])],
+    [sg.Text("動作ログ")],
     [sg.Output(size=(100, 15), key='-MULTILINE-')],
     [sg.Button('ログをコピー'), sg.Button('ログをクリア')]
-]
+]    
 
 # セクション 2 - ウィンドウの生成
 window = sg.Window("ModbusTCP通信クライアント", layout)
@@ -47,14 +57,14 @@ while True:
         mc.modbus_com()
         print("クエリ送信完了")
     if event == "p2":
-        ms.server_start(values[0],values[1])
+        ms.server_start(values["-server_IP-"],values["-server_port-"])
         print("サーバー起動")
     if event == "p3":
-        ms.server_stop(values[0],values[1])
+        ms.server_stop(values["-server_IP-"],values["-server_port-"])
         print("サーバー停止")
     if event == "p4":
         for i in range(len(sendlist)):
-            sendlist[i]=int(values[5])
+            sendlist[i]=int(values["-server_value-"])
         ms.server_wordset(start_address,sendlist)
         print("サーバー所持値変更")
     if event == 'ログをクリア':
