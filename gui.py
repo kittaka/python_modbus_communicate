@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[13]:
+# In[ ]:
 
 
 import PySimpleGUI as sg
@@ -20,9 +20,9 @@ sg.theme('Dark Blue 3')
 
 layout_tab1 = [
     [sg.Text("")],
-    [sg.Text("ファンクション", size=(15, 1)), sg.InputText("3", key="-function-")],
-    [sg.Text("開始レジスタ", size=(15, 1)), sg.InputText("", key="start_register")],
-    [sg.Text("レジスタ数", size=(15, 1)), sg.InputText("", key="amount_of_register")],
+    [sg.Text("ファンクション", size=(15, 1)),sg.Combo(("3","16(将来対応)"), default_value="3",size=(10, 1), key="-function_code-")],
+    [sg.Text("開始レジスタ", size=(15, 1)), sg.InputText("123", key="start_register")],
+    [sg.Text("レジスタ数", size=(15, 1)), sg.InputText("2", key="amount_of_registers")],
     [sg.Submit(button_text="クエリ実行",key="p1")]
 ]
 
@@ -54,8 +54,8 @@ while True:
         break
 
     if event == "p1":
-        mc.modbus_com()
-        print("クエリ送信完了")
+        mc.modbus_com(values["-server_IP-"],values["-server_port-"],values["-function_code-"],values["start_register"],values["amount_of_registers"])
+        #print("クエリ送信完了")
     if event == "p2":
         ms.server_start(values["-server_IP-"],values["-server_port-"])
         print("サーバー起動")

@@ -18,8 +18,9 @@ def server_start(host,port):
     #parser.add_argument('-H', '--host', type=str, default='localhost', help='Host')
     #parser.add_argument('-p', '--port', type=int, default=502, help='TCP port')
     #args = parser.parse_args()
+    #print("humo")
+    
     # start modbus server
-    print("humo")
     server = ModbusServer(host, int(port),no_block=True)
     server.start()
 
@@ -30,8 +31,8 @@ def server_stop(host,port):
     #parser.add_argument('-p', '--port', type=int, default=502, help='TCP port')
     #args = parser.parse_args()
     # start modbus server
-    print("humo")
-    server = ModbusServer(host, int(port),no_block=True)
+    #print("humo")
+    server = ModbusServer(host, int(port),no_block=False)
     server.stop()
     
 def server_wordset(address,wordlist):
